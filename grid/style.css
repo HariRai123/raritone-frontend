@@ -1,0 +1,40 @@
+/* .grid-container{
+    display: grid;
+    grid-auto-columns: 300px; /*for horizontal scrolling like netflix and other otts*/
+/* grid-template-columns: 200px 200px 200px; */
+/* grid-template-rows: 200px 200px 200px; */
+/* grid-auto-rows: 300px;
+    gap: 1em;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+
+} */
+*/ .item {
+  padding: 2em;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 2rem;
+}
+
+.box {
+  background-color: blue;
+  color: white;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 200px 200px;
+  gap: 1em;
+  grid-template-areas: "box-1 box-2 box-2 box-3" "box1 box-4 box-5 box-5";
+}
+
+@media (max-width: 56em) {
+  .grid-container {
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 200px 200px;
+    grid-template-areas: "box-1 box-2 box-2 box-3" "box1 box-4 box-5 box-5";
+  }
+}
