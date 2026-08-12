@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { getProductById } from "../services/api";
+import { getProductById } from "../api/productApi";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -14,11 +14,14 @@ function ProductDetails() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
+        setError("");
 
         const data = await getProductById(id);
 
         setProduct(data);
       } catch (err) {
+        console.error("Error fetching product:", err);
+
         setError("Unable to load product.");
       } finally {
         setLoading(false);
@@ -36,6 +39,10 @@ function ProductDetails() {
     return <div className="error">{error}</div>;
   }
 
+  if (!product) {
+    return <div className="error">Product not found.</div>;
+  }
+
   return (
     <section className="product-details">
       <Link to="/products" className="back-link">
@@ -44,27 +51,34 @@ function ProductDetails() {
 
       <div className="details-container">
         <div className="details-image">
-          <img src={product.image} alt={product.title} />
+          <img src={product.image} alt={product.name} />
         </div>
 
         <div className="details-content">
           <p className="product-category">{product.category}</p>
 
-          <h1>{product.title}</h1>
+          <h1>{product.name}</h1>
 
-          <div className="rating">
-            Rating {product.rating?.rate || "4.5"}
-            <span>({product.rating?.count || 0} reviews)</span>
-          </div>
+          <p className="product-brand">Brand: {product.brand}</p>
 
-          <p className="details-price">${product.price.toFixed(2)}</p>
+          <p className="details-price">₹{Number(product.price).toFixed(2)}</p>
 
           <p className="details-description">{product.description}</p>
 
-          <div className="details-actions">
-            <button className="add-cart-button">Add to Cart</button>
+          <p className="product-stock">
+            {product.stock > 0
+              ? `${product.stock} items available`
+              : "Out of stock"}
+          </p>
 
-            <button className="buy-button">Buy Now</button>
+          <div className="details-actions">
+            <button className="add-cart-button" disabled={product.stock <= 0}>
+              Add to Cart
+            </button>
+
+            <button className="buy-button" disabled={product.stock <= 0}>
+              Buy Now
+            </button>
           </div>
         </div>
       </div>
